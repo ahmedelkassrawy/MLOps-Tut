@@ -22,11 +22,10 @@ jobs:
           python-version: '3.12'
 
       # 3. Install dependencies and generate model
-      - name: Generate ML Model
+      - name: Validate and Generate ML Model
         run: |
-          pip install -r requirements.txt
-          # Run DVC pipeline to generate model.pkl
-          dvc repro
+          chmod +x scripts/validate-pipeline.sh
+          ./scripts/validate-pipeline.sh
         env:
           # Skip MLflow logging in CI
           MLFLOW_TRACKING_URI: ""
