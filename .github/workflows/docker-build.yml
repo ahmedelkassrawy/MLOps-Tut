@@ -15,18 +15,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Log in to DockerHub (you need to add secrets)
+      # 2. Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # 3. Install dependencies and generate model
+      - name: Generate ML Model
+        run: |
+          pip install -r requirements.txt
+          # Run DVC pipeline to generate model.pkl
+          dvc repro
+        env:
+          # Skip MLflow logging in CI
+          MLFLOW_TRACKING_URI: ""
+
+      # 4. Log in to DockerHub (you need to add secrets)
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 3. Build and push image
+      # 5. Build and push image
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+          file: ./src/docker/Dockerfile
+          push: ${{ github.ref == 'refs/heads/main' }}
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/mlops-water-api:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/mlops-water-api:${{ github.sha }}
