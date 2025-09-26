@@ -39,8 +39,4 @@ plots:
 artifacts:
   confusion_matrix:
     path: confusion_matrix.json
-    type:
-    - - 0
-      - 1
-    - - 1
-      - 0
+    type: confusion_matrix
