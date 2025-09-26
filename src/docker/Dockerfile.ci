@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source code
 COPY src/ ./src/
 
-# Create a dummy model file for API to start
-RUN echo "Dummy model - replace with real model.pkl" > model.pkl
+# Copy the model file (created by GitHub Actions)
+COPY model.pkl .
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash app && \

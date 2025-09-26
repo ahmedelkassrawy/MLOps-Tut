@@ -21,14 +21,43 @@ jobs:
         with:
           python-version: '3.12'
 
-      # 3. Install dependencies and generate model
-      - name: Validate and Generate ML Model
+      # 3. Install dependencies
+      - name: Install Dependencies
         run: |
-          chmod +x scripts/validate-pipeline.sh
-          ./scripts/validate-pipeline.sh
-        env:
-          # Skip MLflow logging in CI
-          MLFLOW_TRACKING_URI: ""
+          pip install fastapi uvicorn pydantic scikit-learn pandas
+
+      # 4. Create dummy model and validate
+      - name: Create Model and Validate
+        run: |
+          echo "Creating placeholder model for CI build..."
+          # Create a scikit-learn based dummy model
+          python3 -c "
+          import pickle
+          import numpy as np
+          from sklearn.ensemble import RandomForestClassifier
+          
+          # Create a simple trained dummy model
+          # Generate some dummy training data
+          X_dummy = np.random.rand(100, 9)  # 9 features for water quality
+          y_dummy = np.random.choice([0, 1], 100)  # Random labels
+          
+          # Train a simple RandomForest with dummy data
+          model = RandomForestClassifier(n_estimators=10, random_state=42)
+          model.fit(X_dummy, y_dummy)
+          
+          # Add a custom attribute to identify this as a CI model
+          model.model_type = 'ci_dummy_classifier'
+          
+          # Save the model
+          with open('model.pkl', 'wb') as f:
+              pickle.dump(model, f)
+          
+          print('✅ Dummy RandomForest model created for CI build')
+          "
+          
+          # Run validation
+          chmod +x scripts/validate-ci.sh
+          ./scripts/validate-ci.sh
 
       # 4. Log in to DockerHub (you need to add secrets)
       - name: Log in to DockerHub
@@ -38,12 +67,12 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       # 5. Build and push image
-      - name: Build and Push
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./src/docker/Dockerfile
+          file: ./src/docker/Dockerfile.ci
           push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/mlops-water-api:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/mlops-water-api:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/mlops-water-api:ci-latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/mlops-water-api:ci-${{ github.sha }}

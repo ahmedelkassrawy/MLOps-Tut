@@ -24,7 +24,13 @@ app = FastAPI()
 
 @app.get("/")
 async def main():
-    return {"message": "Water Potability Prediction API", "version": "1.0.0"}
+    model_type = getattr(model, 'model_type', 'production')
+    return {
+        "message": "Water Potability Prediction API", 
+        "version": "1.0.0",
+        "model_type": model_type,
+        "status": "running"
+    }
 
 @app.get("/health")
 async def health():
