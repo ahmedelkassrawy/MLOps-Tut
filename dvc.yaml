@@ -31,3 +31,16 @@ stages:
     - src/model_eval.py
     outs:
     - metrics.json
+metrics:
+- dvclive/metrics.json
+plots:
+- dvclive/plots/metrics:
+    x: step
+artifacts:
+  confusion_matrix:
+    path: confusion_matrix.json
+    type:
+    - - 0
+      - 1
+    - - 1
+      - 0

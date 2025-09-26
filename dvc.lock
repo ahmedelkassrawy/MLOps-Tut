@@ -5,24 +5,24 @@ stages:
     deps:
     - path: src/data_collection.py
       hash: md5
-      md5: 5201e9c64d76383050007c6644c6b838
-      size: 644
+      md5: 245473d5b56dceea0094d33595133c53
+      size: 640
     params:
       params.yaml:
         data_collection.test_size: 0.2
     outs:
     - path: data/raw
       hash: md5
-      md5: 63f22cf40373063ab5b43da8f19d1280.dir
-      size: 518984
+      md5: 2cb722df52fefe99efe57b62a624326d.dir
+      size: 1299
       nfiles: 2
   data_preprocessing:
     cmd: python src/data_prep.py
     deps:
     - path: data/raw
       hash: md5
-      md5: 63f22cf40373063ab5b43da8f19d1280.dir
-      size: 518984
+      md5: 2cb722df52fefe99efe57b62a624326d.dir
+      size: 1299
       nfiles: 2
     - path: src/data_prep.py
       hash: md5
@@ -31,39 +31,39 @@ stages:
     outs:
     - path: data/processed
       hash: md5
-      md5: ab0f4e91ee8198cce883bcafefe81fbd.dir
-      size: 542859
+      md5: dbe6224f9639bc808ace6b22dc2b42fd.dir
+      size: 1299
       nfiles: 2
   model_training:
     cmd: python src/model_building.py
     deps:
     - path: data/processed
       hash: md5
-      md5: ab0f4e91ee8198cce883bcafefe81fbd.dir
-      size: 542859
+      md5: dbe6224f9639bc808ace6b22dc2b42fd.dir
+      size: 1299
       nfiles: 2
     - path: src/model_building.py
       hash: md5
-      md5: a70465f96afcc21b7ab123a95d3075dd
-      size: 479
+      md5: 5fb5b17bb872811cb1c993a286ac1205
+      size: 1315
     outs:
     - path: model.pkl
       hash: md5
-      md5: b5dee08d1d9fa6dcc641fd7036b7978e
-      size: 7356785
+      md5: b75c1cca1fcacea49ecef3a3a6c8f917
+      size: 60768
   model_evaluation:
     cmd: python src/model_eval.py
     deps:
     - path: model.pkl
       hash: md5
-      md5: b5dee08d1d9fa6dcc641fd7036b7978e
-      size: 7356785
+      md5: b75c1cca1fcacea49ecef3a3a6c8f917
+      size: 60768
     - path: src/model_eval.py
       hash: md5
-      md5: 12dee373bcd5f778807757981b1d6271
-      size: 990
+      md5: 9eeac4f14b37a835b71412097fa42f5c
+      size: 1895
     outs:
     - path: metrics.json
       hash: md5
-      md5: 7404693e9875739727c65f30e9f932b4
-      size: 452
+      md5: 7129a485dfc9edad60bd93ab562729e0
+      size: 446

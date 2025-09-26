@@ -4,7 +4,7 @@ import os
 import yaml
 from sklearn.model_selection import train_test_split
 
-data = pd.read_csv("/workspaces/MLOps-Tut/src/data/water_potability.csv")
+data = pd.read_csv("/workspaces/MLOps-Tut/data/water_potability.csv")
 
 test_size = yaml.safe_load(open("/workspaces/MLOps-Tut/params.yaml"))["data_collection"]["test_size"]
 

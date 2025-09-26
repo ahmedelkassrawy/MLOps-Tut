@@ -1,0 +1,62 @@
+# Git files
+.git
+.gitignore
+
+# Python cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.DS_Store
+
+# DVC files
+.dvc/
+dvclive/
+mlruns/
+data/raw/
+data/processed/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Documentation
+README.md
+docs/
+
+# Test files
+tests/
+test_*
+
+# Jupyter notebooks
+*.ipynb
+.ipynb_checkpoints
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Other MLOps files that aren't needed in container
+dvc.yaml
+dvc.lock
+metrics.json
+
+# Docker files (avoid recursive copying)
+Dockerfile
+.dockerignore
+src/docker/

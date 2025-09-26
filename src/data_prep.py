@@ -16,7 +16,7 @@ train_processed_data = fill_missing(train_data)
 test_processed_data = fill_missing(test_data)
 
 data_path = os.path.join("data", "processed")
-os.makedirs(data_path, exist_ok=True)  # Allow directory creation if it already exists
+os.makedirs(data_path, exist_ok=True)  
 
 train_processed_data.to_csv(os.path.join(data_path, "train_processed.csv"), index=False)
 test_processed_data.to_csv(os.path.join(data_path, "test_processed.csv"), index=False)

@@ -22,11 +22,21 @@ class Water(BaseModel):
 
 app = FastAPI()
 
-@app.get("/")  # Add the '@' decorator
+@app.get("/")
 async def main():
-    return {"message": "Hello World"}
+    return {"message": "Water Potability Prediction API", "version": "1.0.0"}
 
-with open("/workspaces/MLOps-Tut/model.pkl", "rb") as f:
+@app.get("/health")
+async def health():
+    return {"status": "healthy", "message": "API is running"}
+
+# Load model with proper path handling
+model_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "model.pkl")
+if not os.path.exists(model_path):
+    # Fallback for Docker container
+    model_path = "/app/model.pkl"
+
+with open(model_path, "rb") as f:
     model = pickle.load(f)
 
 @app.post("/predict")
