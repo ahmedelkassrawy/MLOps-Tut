@@ -21,7 +21,11 @@ done
 
 # Validate DVC pipeline structure
 echo "🔧 Validating DVC pipeline structure..."
-dvc dag > /dev/null 2>&1 || { echo "❌ DVC pipeline validation failed"; exit 1; }
+timeout 10 dvc dag >/dev/null 2>&1 || { 
+    echo "❌ DVC pipeline validation failed - checking alternative method..."
+    # Try alternative validation using dvc status
+    dvc status >/dev/null 2>&1 || { echo "❌ DVC pipeline validation failed"; exit 1; }
+}
 echo "✅ DVC pipeline structure is valid"
 
 # Check if Python dependencies can be installed

@@ -36,3 +36,11 @@ metrics:
 plots:
 - dvclive/plots/metrics:
     x: step
+artifacts:
+  confusion_matrix:
+    path: confusion_matrix.json
+    type:
+    - - 0
+      - 1
+    - - 1
+      - 0
